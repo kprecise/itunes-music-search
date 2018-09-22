@@ -3,13 +3,13 @@
     <div class="search-filter">
       <h1>{{title}}</h1>
       <p class="instructional">Choose an artist to search:</p>
-      <form v-on:submit.prevent="noop">
+      <form v-on:submit.prevent="preventSubmission">
         <label for="search">Search</label>
         <input
                 type="text"
                 name="search"
                 v-on:input="storeInput"
-                v-on:keyup="enterHit"
+                v-on:keyup="handleEnterKey"
         />
         <b-button variant="primary" v-on:click="runSearch">
           {{button}}
@@ -21,20 +21,19 @@
       <div v-if="showResults">
         <h2>Search Results</h2>
         <b-row>
-        <b-col xs="12" md="3" v-for="item in musicCatalogue" :key="item.id">
-          <b-card>
-            <b-row>
-              <b-col xs="12">
-                <h3>{{ item.artistName }}</h3>
-                <h4>{{ item.collectionName }}</h4>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col xs="2" md="12">
-                <img v-bind:src="item.artworkUrl100" />
-              </b-col>
-              <b-col class="details" xs="10" md="12">
-                <p>
+          <b-col xs="12" md="3" v-for="item in musicCatalogue" :key="item.id">
+            <b-card>
+              <b-row>
+                <b-col xs="12">
+                  <h3>{{ item.artistName }}</h3>
+                  <h4>{{ item.collectionName }}</h4>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col xs="2" md="12">
+                  <img v-bind:src="item.artworkUrl100" />
+                </b-col>
+                <b-col class="details" xs="10" md="12">
                   <span>Songs:</span> {{ item.trackCount }}<br />
                   <span>Genre:</span> {{ item.primaryGenreName }}<br />
                   <span>Price:</span> ${{ item.collectionPrice }}<br />
@@ -43,21 +42,20 @@
                   <div v-if="item.artistViewUrl">
                     <a v-bind:href="checkLink(item.artistViewUrl)">Buy on iTunes</a>
                   </div>
-                </p>
-              </b-col>
-            </b-row>
-            <hr />
-            <b-row>
-              <b-col xs="12">
-                <audio id="t-rex-roar" controls>
-                  <source v-bind:src="item.previewUrl" />
-                  Your browser does not support the <code>audio</code> element.
-                </audio>
-              </b-col>
-            </b-row>
-          </b-card>
-        </b-col>
-      </b-row>
+                </b-col>
+              </b-row>
+              <hr />
+              <b-row>
+                <b-col xs="12">
+                  <audio id="t-rex-roar" controls>
+                    <source v-bind:src="item.previewUrl" />
+                    Your browser does not support the <code>audio</code> element.
+                  </audio>
+                </b-col>
+              </b-row>
+            </b-card>
+          </b-col>
+        </b-row>
       </div>
     </div>
   </div>
@@ -82,9 +80,8 @@
             }
         },
         methods: {
-            enterHit: function(event) {
+            handleEnterKey: function(event) {
                 if (event.keyCode === 13) {
-                    console.log('enter hit')//eslint-disable-line
                     this.runSearch()
                 }
             },
@@ -92,14 +89,11 @@
                 this.userInput = event.target.value
             },
             runSearch: function () {
-                console.log('runsearch')//eslint-disable-line
                 const url ='https://itunes.apple.com/search?term=';
                 let self = this;
                 if (this.userInput !== '') {
-                    console.log('user entered value')//eslint-disable-line
                     this.status = 'results';
-                    let searchTerm = this.userInput.replace(/\s/g, '').toLowerCase();//eslint-disable-line
-                    console.log(searchTerm)//eslint-disable-line
+                    let searchTerm = this.userInput.replace(/\s/g, '').toLowerCase();
                     axios
                         .get(url + searchTerm)
                         .then(function (response) {
@@ -108,7 +102,6 @@
                                 self.musicCatalogue = response.data.results;
                                 self.showResults = true;
                             } else {
-                                console.log('There are no artists that match your search');//eslint-disable-line
                                 self.warningMessage = 'There are no artists that match your search';
                             }
                         })
@@ -130,8 +123,8 @@
                     return 'No link'
                 }
             },
-            noop: function (event) {
-                console.log(event.target);
+            preventSubmission: function (event) {
+                event.preventDefault();
             }
         }
     }
@@ -229,10 +222,10 @@
     text-align: left;
   }
 
-  @media only screen and (max-width: 767px) {
-    img {
-      display: none;
-    }
-  }
+  /*@media only screen and (max-width: 767px) {*/
+    /*img {*/
+      /*display: none;*/
+    /*}*/
+  /*}*/
 
 </style>
