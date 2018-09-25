@@ -20,42 +20,40 @@
     <div class="results" v-bind:show-results="showResults">
       <div v-if="showResults">
         <h2>Search Results</h2>
-        <b-row>
-          <b-col xs="12" md="3" v-for="item in musicCatalogue" :key="item.id">
-            <b-card>
-              <b-row>
-                <b-col xs="12">
-                  <h3>{{ item.artistName }}</h3>
-                  <h4>{{ item.collectionName }}</h4>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col xs="2" md="12">
-                  <img v-bind:src="item.artworkUrl100" />
-                </b-col>
-                <b-col class="details" xs="10" md="12">
-                  <span>Songs:</span> {{ item.trackCount }}<br />
-                  <span>Genre:</span> {{ item.primaryGenreName }}<br />
-                  <span>Price:</span> ${{ item.collectionPrice }}<br />
-                  <span>Date:</span> {{ formatDate(item.releaseDate) }}<br />
-                  <span>Country:</span> {{ item.country }}<br />
-                  <div v-if="item.artistViewUrl">
-                    <a v-bind:href="checkLink(item.artistViewUrl)">Buy on iTunes</a>
-                  </div>
-                </b-col>
-              </b-row>
-              <hr />
-              <b-row>
-                <b-col xs="12">
-                  <audio id="t-rex-roar" controls>
-                    <source v-bind:src="item.previewUrl" />
-                    Your browser does not support the <code>audio</code> element.
-                  </audio>
-                </b-col>
-              </b-row>
-            </b-card>
-          </b-col>
-        </b-row>
+        <b-card-group columns>
+          <b-card v-for="item in musicCatalogue" :key="item.id">  
+            <b-row>
+              <b-col xs="12">
+                <h3>{{ item.artistName }}</h3>
+                <h4>{{ item.collectionName }}</h4>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col xs="2" md="12">
+                <img v-bind:src="item.artworkUrl100" />
+              </b-col>
+              <b-col class="details" xs="10" md="12">
+                <span>Songs:</span> {{ item.trackCount }}<br />
+                <span>Genre:</span> {{ item.primaryGenreName }}<br />
+                <span>Price:</span> ${{ item.collectionPrice }}<br />
+                <span>Date:</span> {{ formatDate(item.releaseDate) }}<br />
+                <span>Country:</span> {{ item.country }}<br />
+                <div v-if="item.artistViewUrl">
+                  <a v-bind:href="checkLink(item.artistViewUrl)">Buy on iTunes</a>
+                </div>
+              </b-col>
+            </b-row>
+            <hr />
+            <b-row>
+              <b-col xs="12">
+                <audio id="t-rex-roar" controls>
+                  <source v-bind:src="item.previewUrl" />
+                  Your browser does not support the <code>audio</code> element.
+                </audio>
+              </b-col>
+            </b-row>
+          </b-card>
+        </b-card-group>
       </div>
     </div>
   </div>
@@ -216,16 +214,24 @@
     width: 100%;
   }
   .card {
-    min-height: 280px;
     margin-bottom: 1em;
     background-color: #fafafa;
     text-align: left;
   }
 
-  /*@media only screen and (max-width: 767px) {*/
-    /*img {*/
-      /*display: none;*/
-    /*}*/
-  /*}*/
-
+    @media only screen and (max-width: 767px) {
+      .card-columns {
+        column-count: 1;
+      }
+    }
+    @media only screen and (min-width: 768px) {
+      .card-columns {
+        column-count: 4;
+      }
+    }
+    @media only screen and (min-width: 1024px) {
+      .card-columns {
+        column-count: 5;
+      }
+    }  
 </style>
