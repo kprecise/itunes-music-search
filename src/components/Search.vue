@@ -55,6 +55,10 @@
           </b-card>
         </b-card-group>
       </div>
+      <div v-show="loading">
+        <p>Results are loading. Please wait.</p>
+        <div class="loader"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -74,7 +78,8 @@
                 userInput: '',
                 warningMessage: '',
                 musicCatalogue: [],
-                showResults: false
+                showResults: false,
+                loading: false
             }
         },
         methods: {
@@ -91,6 +96,7 @@
                 let self = this;
                 if (this.userInput !== '') {
                     this.status = 'results';
+                    this.loading = true;
                     let searchTerm = this.userInput.replace(/\s/g, '').toLowerCase();
                     axios
                         .get(url + searchTerm)
@@ -99,6 +105,7 @@
                                 // handle success
                                 self.musicCatalogue = response.data.results;
                                 self.showResults = true;
+                                self.loading = false;
                             } else {
                                 self.warningMessage = 'There are no artists that match your search';
                             }
@@ -218,20 +225,33 @@
     background-color: #fafafa;
     text-align: left;
   }
-
-    @media only screen and (max-width: 767px) {
-      .card-columns {
-        column-count: 1;
-      }
+  .loader {
+    border: 8px solid #f3f3f3; 
+    border-top: 8px solid #00838f;
+    border-bottom: 8px solid #2ec0b0;    
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+  }
+  @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+  }
+  @media only screen and (max-width: 767px) {
+    .card-columns {
+      column-count: 1;
     }
-    @media only screen and (min-width: 768px) {
-      .card-columns {
-        column-count: 4;
-      }
+  }
+  @media only screen and (min-width: 768px) {
+    .card-columns {
+      column-count: 4;
     }
-    @media only screen and (min-width: 1024px) {
-      .card-columns {
-        column-count: 5;
-      }
-    }  
+  }
+  @media only screen and (min-width: 1024px) {
+    .card-columns {
+      column-count: 5;
+    }
+  }  
 </style>
