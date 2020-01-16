@@ -1,4 +1,4 @@
-# iTunes Music Search (Vue JS, Bootstrao Vue, iTunes API, Axios, Moment JS)
+# iTunes Music Search (Vue JS, Bootstrap Vue, iTunes API, Axios, Moment JS)
 A small application that allows you to search audio through iTunes's API and retrieve search results. Results contain some basic details; number of songs, genre, price, date and country. An audio clip is also included.
 
 ## Project setup
